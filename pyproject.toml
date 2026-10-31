@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agent-injection-lab"
+version = "0.1.0"
+description = "Planted prompt injections against a tool-using assistant: which defences stop them, and what they cost"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+# The LLM client comes from research-agent (install it next to this repo):
+#   pip install -e ../research-agent[openai] -e .[dev]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7.4"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
