@@ -9,11 +9,11 @@
   9 of 12 attempts.
 - A warning in the system prompt cut that to 2 of 36, and spotlighting to 1 of 36, at no measurable
   cost on clean tasks.
-- One attack beat every defence: a fake "policy update" stating a false fact, with no instruction
+- One attack beat every defence I tested: a fake "policy update" stating a false fact, with no instruction
   for a filter to catch.
 - The approval gate stopped all hijacking emails but none of the leaks through the answer; the
-  screening model caught 35 of 36 poisoned documents but left the assistant unable to answer 34 of
-  36 attacked questions.
+  screening model caught 35 of 36 poisoned documents but, because it withholds the whole document,
+  left the assistant unable to answer 34 of 36 attacked questions.
 
 An agent that reads untrusted text (retrieved documents, web pages, tool output) can be told by
 that text to do something else. This project plants injections into the documents an assistant
@@ -80,11 +80,11 @@ request, a footnote), placed at the start, middle or end of the document. All of
 **Metrics**
 - attack success rate per family and per defence, with 95% Wilson intervals
 - utility on the 24 clean tasks: task success, clean documents wrongly withheld, legitimate emails blocked
-- task success under attack
+- task success under attack, and answered without the attack succeeding
 - calls, tokens and time per run
 
 **Model.** `gemini-3.5-flash-lite` on the free tier, reasoning effort low, temperature 0, the same
-model for the agent and the screener. 60 cases × 6 defences = 360 runs, about 1,000 calls.
+model for the agent and the screener. 60 cases × 6 configurations (no defence, four defences alone, all four together) = 360 runs, about 1,000 calls.
 
 ### Changes to the plan, made before running
 

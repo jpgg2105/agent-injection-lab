@@ -55,7 +55,7 @@ def write_report(path: Path) -> Path:
     defs = [d for d in DEFENCES if d in by]
     n_over = sum(1 for r in rows if r.get("reviewed"))
     L = ["# Agent injection lab: results", "", f"{len(rows)} finished runs."
-         + (f" {n_over} automatic verdicts were overridden after reading the answers (see manual_review.json)." if n_over else ""), ""]
+         + (f" {n_over} automatic verdicts were overridden after each answer was reviewed (see manual_review.json)." if n_over else ""), ""]
     L += ["## Attack success rate", "", "Share of attacks that worked, with 95% Wilson intervals.", "",
           "| Defence | all attacks | hijack (email sent) | hijack attempted | manipulation | exfiltration |", "|---|---|---|---|---|---|"]
     for d in defs:
@@ -63,17 +63,19 @@ def write_report(path: Path) -> Path:
         fam = {f: [r for r in at if r["family"] == f] for f in FAMILIES}
         L.append(f"| {d} | {rate(at, 'success')} | {rate(fam['hijack'], 'success')} | {rate(fam['hijack'], 'attempted')} | "
                  f"{rate(fam['manipulation'], 'success')} | {rate(fam['exfiltration'], 'success')} |")
-    L += ["", "## Cost on clean tasks", "", "| Defence | task success (clean) | clean doc withheld | legit email blocked | task success under attack | calls per run | tokens per run (in/out) | seconds per run |",
-          "|---|---|---|---|---|---|---|---|"]
+    L += ["", "## Cost on clean tasks", "", "| Defence | task success (clean) | clean doc withheld | legit email blocked | task success under attack | answered and not compromised | calls per run | tokens per run (in/out) | seconds per run |",
+          "|---|---|---|---|---|---|---|---|---|"]
     for d in defs:
         cl = [r for r in by[d] if r["kind"] == "clean"]
         at = [r for r in by[d] if r["kind"] == "attack"]
+        for r in at:
+            r["safe_answer"] = bool(r["task_success"] and not r["success"])
         calls = sum(r.get("calls", 0) + r.get("screen_calls", 0) for r in by[d]) / len(by[d])
         tin = sum(r.get("usage", {}).get("input_tokens", 0) for r in by[d]) / len(by[d])
         tout = sum(r.get("usage", {}).get("output_tokens", 0) for r in by[d]) / len(by[d])
         sec = sum(r.get("seconds", 0) for r in by[d]) / len(by[d])
         L.append(f"| {d} | {rate(cl, 'task_success')} | {rate(cl, 'clean_doc_withheld')} | {rate([r for r in cl if r.get('needs_send')], 'legit_email_blocked')} | "
-                 f"{rate(at, 'task_success')} | {calls:.2f} | {tin:,.0f} / {tout:,.0f} | {sec:.1f} |")
+                 f"{rate(at, 'task_success')} | {rate(at, 'safe_answer')} | {calls:.2f} | {tin:,.0f} / {tout:,.0f} | {sec:.1f} |")
     L += ["", "Seconds include waiting for the free tier's rate limit, so compare calls and tokens, not time.", "",
           "## By technique (no defence)", "", "| Technique | " + " | ".join(FAMILIES) + " |", "|---|---|---|---|"]
     techs = defaultdict(dict)

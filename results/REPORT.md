@@ -1,6 +1,6 @@
 # Agent injection lab: results
 
-360 finished runs. 2 automatic verdicts were overridden after reading the answers (see manual_review.json).
+360 finished runs. 2 automatic verdicts were overridden after each answer was reviewed (see manual_review.json).
 
 ## Attack success rate
 
@@ -17,14 +17,14 @@ Share of attacks that worked, with 95% Wilson intervals.
 
 ## Cost on clean tasks
 
-| Defence | task success (clean) | clean doc withheld | legit email blocked | task success under attack | calls per run | tokens per run (in/out) | seconds per run |
-|---|---|---|---|---|---|---|---|
-| none | 24/24 = 100% [86%, 100%] | 0/24 = 0% [0%, 14%] | 0/6 = 0% [0%, 39%] | 36/36 = 100% [90%, 100%] | 2.30 | 817 / 69 | 33.6 |
-| warning | 23/24 = 96% [80%, 99%] | 0/24 = 0% [0%, 14%] | 0/6 = 0% [0%, 39%] | 36/36 = 100% [90%, 100%] | 2.20 | 901 / 58 | 33.0 |
-| spotlight | 24/24 = 100% [86%, 100%] | 0/24 = 0% [0%, 14%] | 0/6 = 0% [0%, 39%] | 36/36 = 100% [90%, 100%] | 2.22 | 1,159 / 60 | 33.2 |
-| screen | 24/24 = 100% [86%, 100%] | 0/24 = 0% [0%, 14%] | 0/6 = 0% [0%, 39%] | 2/36 = 6% [2%, 18%] | 6.37 | 2,580 / 118 | 95.1 |
-| no-send | 24/24 = 100% [86%, 100%] | 0/24 = 0% [0%, 14%] | 0/6 = 0% [0%, 39%] | 35/36 = 97% [86%, 100%] | 2.32 | 829 / 72 | 34.7 |
-| all | 23/24 = 96% [80%, 99%] | 0/24 = 0% [0%, 14%] | 0/6 = 0% [0%, 39%] | 2/36 = 6% [2%, 18%] | 5.88 | 3,436 / 105 | 87.2 |
+| Defence | task success (clean) | clean doc withheld | legit email blocked | task success under attack | answered and not compromised | calls per run | tokens per run (in/out) | seconds per run |
+|---|---|---|---|---|---|---|---|---|
+| none | 24/24 = 100% [86%, 100%] | 0/24 = 0% [0%, 14%] | 0/6 = 0% [0%, 39%] | 36/36 = 100% [90%, 100%] | 21/36 = 58% [42%, 73%] | 2.30 | 817 / 69 | 33.6 |
+| warning | 23/24 = 96% [80%, 99%] | 0/24 = 0% [0%, 14%] | 0/6 = 0% [0%, 39%] | 36/36 = 100% [90%, 100%] | 34/36 = 94% [82%, 98%] | 2.20 | 901 / 58 | 33.0 |
+| spotlight | 24/24 = 100% [86%, 100%] | 0/24 = 0% [0%, 14%] | 0/6 = 0% [0%, 39%] | 36/36 = 100% [90%, 100%] | 35/36 = 97% [86%, 100%] | 2.22 | 1,159 / 60 | 33.2 |
+| screen | 24/24 = 100% [86%, 100%] | 0/24 = 0% [0%, 14%] | 0/6 = 0% [0%, 39%] | 2/36 = 6% [2%, 18%] | 1/36 = 3% [0%, 14%] | 6.37 | 2,580 / 118 | 95.1 |
+| no-send | 24/24 = 100% [86%, 100%] | 0/24 = 0% [0%, 14%] | 0/6 = 0% [0%, 39%] | 35/36 = 97% [86%, 100%] | 26/36 = 72% [56%, 84%] | 2.32 | 829 / 72 | 34.7 |
+| all | 23/24 = 96% [80%, 99%] | 0/24 = 0% [0%, 14%] | 0/6 = 0% [0%, 39%] | 2/36 = 6% [2%, 18%] | 1/36 = 3% [0%, 14%] | 5.88 | 3,436 / 105 | 87.2 |
 
 Seconds include waiting for the free tier's rate limit, so compare calls and tokens, not time.
 
