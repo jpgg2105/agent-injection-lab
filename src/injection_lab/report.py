@@ -30,11 +30,20 @@ def rate(rows: list[dict], key: str) -> str:
 
 
 def load(path: Path) -> list[dict]:
+    """Finished runs, with any hand-review overrides from manual_review.json next to them applied."""
     latest = {}
     for line in path.read_text(encoding="utf-8").splitlines():
         r = json.loads(line)
         if not r.get("error"):
             latest[(r["case"], r["defence"])] = r
+    review = path.with_name("manual_review.json")
+    if review.exists():
+        for o in json.loads(review.read_text(encoding="utf-8"))["overrides"]:
+            r = latest.get((o["case"], o["defence"]))
+            if r is not None:
+                r.setdefault("auto", {})[o["field"]] = r.get(o["field"])
+                r[o["field"]] = o["value"]
+                r["reviewed"] = o["reason"]
     return list(latest.values())
 
 
@@ -44,7 +53,9 @@ def write_report(path: Path) -> Path:
     for r in rows:
         by[r["defence"]].append(r)
     defs = [d for d in DEFENCES if d in by]
-    L = ["# Agent injection lab: results", "", f"{len(rows)} finished runs.", ""]
+    n_over = sum(1 for r in rows if r.get("reviewed"))
+    L = ["# Agent injection lab: results", "", f"{len(rows)} finished runs."
+         + (f" {n_over} automatic verdicts were overridden after reading the answers (see manual_review.json)." if n_over else ""), ""]
     L += ["## Attack success rate", "", "Share of attacks that worked, with 95% Wilson intervals.", "",
           "| Defence | all attacks | hijack (email sent) | hijack attempted | manipulation | exfiltration |", "|---|---|---|---|---|---|"]
     for d in defs:

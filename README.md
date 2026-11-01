@@ -1,7 +1,19 @@
 # Agent injection lab: what actually stops prompt injection?
 
-> Status: **code ready, not run yet.** The hypotheses below were written before any run and are
-> not edited afterwards.
+> Status: **run on 31 October and 1 November 2026. Full write-up in [RESULTS.md](RESULTS.md).**
+> The hypotheses below were written before the run and are not edited afterwards.
+
+## Headline result
+
+- Undefended, the assistant followed 15 of 36 planted injections (42%), leaking its secret code in
+  9 of 12 attempts.
+- A warning in the system prompt cut that to 2 of 36, and spotlighting to 1 of 36, at no measurable
+  cost on clean tasks.
+- One attack beat every defence: a fake "policy update" stating a false fact, with no instruction
+  for a filter to catch.
+- The approval gate stopped all hijacking emails but none of the leaks through the answer; the
+  screening model caught 35 of 36 poisoned documents but left the assistant unable to answer 34 of
+  36 attacked questions.
 
 An agent that reads untrusted text (retrieved documents, web pages, tool output) can be told by
 that text to do something else. This project plants injections into the documents an assistant
