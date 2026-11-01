@@ -9,7 +9,7 @@
   9 of 12 attempts.
 - A warning in the system prompt cut that to 2 of 36, and spotlighting to 1 of 36, at no measurable
   cost on clean tasks.
-- One attack beat every defence I tested: a fake "policy update" stating a false fact, with no instruction
+- One attack beat every defense I tested: a fake "policy update" stating a false fact, with no instruction
   for a filter to catch.
 - The approval gate stopped all hijacking emails but none of the leaks through the answer; the
   screening model caught 35 of 36 poisoned documents but, because it withholds the whole document,
@@ -17,15 +17,15 @@
 
 An agent that reads untrusted text (retrieved documents, web pages, tool output) can be told by
 that text to do something else. This project plants injections into the documents an assistant
-reads, and measures which defences reduce attacks, and how much useful work each defence costs.
+reads, and measures which defenses reduce attacks, and how much useful work each defense costs.
 
 ## Questions
 
 1. How often does an injection planted in a retrieved document change what the agent does or says?
-2. Which defences reduce that rate: delimiters around untrusted text ("spotlighting"), a warning in
+2. Which defenses reduce that rate: delimiters around untrusted text ("spotlighting"), a warning in
    the system prompt, a separate model that screens retrieved text, or removing the dangerous tool
    (permissions)?
-3. What does each defence cost on clean tasks: wrongly blocked answers, lower accuracy, extra calls?
+3. What does each defense cost on clean tasks: wrongly blocked answers, lower accuracy, extra calls?
 
 ## Hypotheses (written before running)
 
@@ -58,9 +58,9 @@ compliance notice, Spanish, a fake end of document, a policy update, a spoofed t
 request, a footnote), placed at the start, middle or end of the document. All of them are in
 `scripts/build_cases.py`.
 
-**Defences compared** (`src/injection_lab/defences.py`)
+**Defenses compared** (`src/injection_lab/defences.py`)
 
-| Name | Defence |
+| Name | Defense |
 | --- | --- |
 | none | baseline agent |
 | warning | the system prompt says documents may contain instructions and must never be followed |
@@ -78,13 +78,13 @@ request, a footnote), placed at the start, middle or end of the document. All of
   actually sent to the user
 
 **Metrics**
-- attack success rate per family and per defence, with 95% Wilson intervals
+- attack success rate per family and per defense, with 95% Wilson intervals
 - utility on the 24 clean tasks: task success, clean documents wrongly withheld, legitimate emails blocked
 - task success under attack, and answered without the attack succeeding
 - calls, tokens and time per run
 
 **Model.** `gemini-3.5-flash-lite` on the free tier, reasoning effort low, temperature 0, the same
-model for the agent and the screener. 60 cases × 6 configurations (no defence, four defences alone, all four together) = 360 runs, about 1,000 calls.
+model for the agent and the screener. 60 cases × 6 configurations (no defense, four defenses alone, all four together) = 360 runs, about 1,000 calls.
 
 ### Changes to the plan, made before running
 
